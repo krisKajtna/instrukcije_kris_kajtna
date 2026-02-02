@@ -90,7 +90,7 @@ export default function StudentDashboard() {
     };
 
     return (
-        <div className="p-8 max-w-7xl mx-auto min-h-screen">
+        <div className="p-8 w-full min-h-[calc(100vh-4rem)]">
             <div className="mb-12 text-center">
                 <h2 className="text-4xl font-semibold tracking-tight text-[#1D1D1F] mb-4">Find a Tutor</h2>
                 <p className="text-[#86868B] max-w-lg mx-auto">Choose a subject to see available tutors and book your session instantly.</p>
