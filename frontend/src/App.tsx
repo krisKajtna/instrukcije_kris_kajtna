@@ -6,9 +6,11 @@ import RegisterPage from './pages/RegisterPage';
 import TutorDashboard from './pages/TutorDashboard';
 import StudentDashboard from './pages/StudentDashboard';
 import ProfilePage from './pages/ProfilePage';
+import WalletPage from './pages/WalletPage';
+import ReservationsPage from './pages/ReservationsPage';
 
 // Simple protected route wrapper
-const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isLoading } = useAuth();
   if (isLoading) return <div>Loading...</div>;
   if (!user) return <Navigate to="/login" />;
@@ -26,6 +28,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-sm font-medium">
             {user?.balance} tokens
           </span>
+          <Link to="/reservations" className="text-gray-600 hover:text-indigo-600 font-medium">Reservations</Link>
+          <Link to="/wallet" className="text-gray-600 hover:text-indigo-600 font-medium">Wallet</Link>
           <Link to="/profile" className="text-gray-600 hover:text-indigo-600 font-medium">Profile</Link>
           <button onClick={logout} className="text-red-500 hover:text-red-700 text-sm">Logout</button>
         </div>
@@ -63,6 +67,20 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <ProfilePage />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/wallet" element={
+            <ProtectedRoute>
+              <Layout>
+                <WalletPage />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/reservations" element={
+            <ProtectedRoute>
+              <Layout>
+                <ReservationsPage />
               </Layout>
             </ProtectedRoute>
           } />

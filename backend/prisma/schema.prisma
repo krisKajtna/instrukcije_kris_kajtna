@@ -55,6 +55,7 @@ model Subject {
   createdAt DateTime @default(now())
 
   tutorSubjects TutorSubject[]
+  reservations  Reservation[]
 }
 
 model TutorSubject {
@@ -80,8 +81,9 @@ model Reservation {
   price     Int // Price locked at reservation time
   createdAt DateTime          @default(now())
 
-  student User @relation("StudentReservations", fields: [studentId], references: [id])
-  tutor   User @relation("TutorReservations", fields: [tutorId], references: [id])
+  student User    @relation("StudentReservations", fields: [studentId], references: [id])
+  tutor   User    @relation("TutorReservations", fields: [tutorId], references: [id])
+  subject Subject? @relation(fields: [subjectId], references: [id])
 }
 
 model Transaction {
