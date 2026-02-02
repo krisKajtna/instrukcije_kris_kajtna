@@ -11,81 +11,97 @@ export default function RegisterPage() {
     const onSubmit = async (data: any) => {
         try {
             setServerError('');
-            // Force default values or transform data if needed
             await api.post('/auth/register', data);
-            navigate('/login'); // Redirect to login after successful registration
+            navigate('/login');
         } catch (error: any) {
             setServerError(error.response?.data?.message || 'Registration failed');
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-            <div className="max-w-md w-full p-6 bg-white rounded-xl shadow-lg">
-                <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Create Account</h2>
+        <div className="min-h-screen flex items-center justify-center p-4">
+            <div className="card-glass w-full max-w-[440px] p-8 md:p-12">
+                <div className="text-center mb-10">
+                    <h2 className="text-3xl font-semibold text-[#1D1D1F] tracking-tight">Create Account</h2>
+                    <p className="text-[#86868B] mt-2 text-sm">Join to start learning or teaching</p>
+                </div>
 
                 {serverError && (
-                    <div className="p-3 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">
+                    <div className="p-3 mb-6 text-sm text-red-600 bg-red-50 rounded-lg border border-red-100 text-center">
                         {serverError}
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700">First Name</label>
+                            <label className="block text-xs font-medium text-[#86868B] uppercase tracking-wide mb-2 ml-1">First Name</label>
                             <input
                                 {...register('firstName', { required: 'Required' })}
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+                                placeholder="John"
+                                className="input-field"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700">Last Name</label>
+                            <label className="block text-xs font-medium text-[#86868B] uppercase tracking-wide mb-2 ml-1">Last Name</label>
                             <input
                                 {...register('lastName', { required: 'Required' })}
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+                                placeholder="Doe"
+                                className="input-field"
                             />
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Email</label>
+                        <label className="block text-xs font-medium text-[#86868B] uppercase tracking-wide mb-2 ml-1">Email</label>
                         <input
                             {...register('email', { required: 'Required' })}
                             type="email"
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+                            placeholder="john@example.com"
+                            className="input-field"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Role</label>
-                        <select {...register('role')} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border">
-                            <option value="STUDENT">Student</option>
-                            <option value="TUTOR">Tutor</option>
-                        </select>
+                        <label className="block text-xs font-medium text-[#86868B] uppercase tracking-wide mb-2 ml-1">Role</label>
+                        <div className="relative">
+                            <select
+                                {...register('role')}
+                                className="input-field appearance-none cursor-pointer"
+                            >
+                                <option value="STUDENT">Student</option>
+                                <option value="TUTOR">Tutor</option>
+                            </select>
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </div>
+                        </div>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Password</label>
+                        <label className="block text-xs font-medium text-[#86868B] uppercase tracking-wide mb-2 ml-1">Password</label>
                         <input
                             {...register('password', { required: 'Required', minLength: { value: 6, message: 'Min 6 chars' } })}
                             type="password"
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+                            placeholder="••••••••"
+                            className="input-field"
                         />
-                        {errors.password && <span className="text-xs text-red-500">{String(errors.password.message)}</span>}
+                        {errors.password && <span className="text-xs text-red-500 mt-1 ml-1 block">{String(errors.password.message)}</span>}
                     </div>
 
                     <button
                         type="submit"
-                        className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        className="btn-primary w-full mt-4"
                     >
                         Register
                     </button>
                 </form>
 
-                <p className="mt-4 text-center text-sm text-gray-600">
+                <p className="mt-8 text-center text-sm text-[#86868B]">
                     Already have an account?{' '}
-                    <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
+                    <Link to="/login" className="font-medium text-[#0071E3] hover:underline transition-colors">
                         Sign in
                     </Link>
                 </p>

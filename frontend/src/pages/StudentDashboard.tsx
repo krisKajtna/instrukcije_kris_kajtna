@@ -90,44 +90,53 @@ export default function StudentDashboard() {
     };
 
     return (
-        <div className="p-6 relative">
-            <h2 className="text-2xl font-bold mb-6">Find a Tutor</h2>
-
-            <div className="mb-8">
-                <select
-                    className="w-full max-w-md border rounded p-3 text-lg"
-                    value={selectedSubject}
-                    onChange={(e) => setSelectedSubject(e.target.value)}
-                >
-                    <option value="">Select a subject to learn...</option>
-                    {subjects.map(s => (
-                        <option key={s.id} value={s.id}>{s.name}</option>
-                    ))}
-                </select>
+        <div className="p-8 max-w-7xl mx-auto min-h-screen">
+            <div className="mb-12 text-center">
+                <h2 className="text-4xl font-semibold tracking-tight text-[#1D1D1F] mb-4">Find a Tutor</h2>
+                <p className="text-[#86868B] max-w-lg mx-auto">Choose a subject to see available tutors and book your session instantly.</p>
             </div>
 
-            {loading && <div>Loading tutors...</div>}
+            <div className="mb-12 max-w-md mx-auto">
+                <div className="relative">
+                    <select
+                        className="input-field appearance-none cursor-pointer"
+                        value={selectedSubject}
+                        onChange={(e) => setSelectedSubject(e.target.value)}
+                    >
+                        <option value="">Select a subject to learn...</option>
+                        {subjects.map(s => (
+                            <option key={s.id} value={s.id}>{s.name}</option>
+                        ))}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {loading && <div className="text-center text-[#86868B] animate-pulse">Loading tutors...</div>}
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {tutors.map(t => (
-                    <div key={t.tutorId} className="bg-white rounded-lg shadow-md overflow-hidden p-6 border hover:border-blue-500 transition">
-                        <div className="flex items-center gap-4 mb-4">
-                            <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center text-xl font-bold text-gray-500 overflow-hidden">
-                                {t.tutor.avatarUrl ? (
-                                    <img src={`http://localhost:3000${t.tutor.avatarUrl}`} alt="" className="w-full h-full object-cover" />
-                                ) : (
-                                    t.tutor.firstName[0]
-                                )}
-                            </div>
-                            <div>
-                                <h3 className="font-bold text-lg">{t.tutor.firstName} {t.tutor.lastName}</h3>
-                                <p className="text-blue-600 font-medium">{t.price} tokens / hr</p>
-                            </div>
+                    <div key={t.tutorId} className="card-glass p-8 transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl flex flex-col items-center text-center">
+                        <div className="w-24 h-24 mb-6 rounded-full overflow-hidden shadow-inner bg-gray-100 flex items-center justify-center text-3xl font-bold text-gray-400">
+                            {t.tutor.avatarUrl ? (
+                                <img src={`http://localhost:3000${t.tutor.avatarUrl}`} alt="" className="w-full h-full object-cover" />
+                            ) : (
+                                t.tutor.firstName[0]
+                            )}
                         </div>
-                        {t.tutor.bio && <p className="text-gray-600 text-sm mb-4 line-clamp-3">{t.tutor.bio}</p>}
+
+                        <h3 className="font-semibold text-xl text-[#1D1D1F] mb-1">{t.tutor.firstName} {t.tutor.lastName}</h3>
+                        <p className="text-[#0071E3] font-medium mb-4 bg-blue-50 px-3 py-1 rounded-full text-sm">{t.price} tokens / hr</p>
+
+                        {t.tutor.bio && <p className="text-[#86868B] text-sm mb-6 line-clamp-2">{t.tutor.bio}</p>}
+
                         <button
                             onClick={() => setBookingTutor(t)}
-                            className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700"
+                            className="btn-primary w-full mt-auto"
                         >
                             Book Session
                         </button>
@@ -136,44 +145,47 @@ export default function StudentDashboard() {
             </div>
 
             {selectedSubject && !loading && tutors.length === 0 && (
-                <p className="text-gray-500 text-center mt-8">No tutors found for this subject yet.</p>
+                <div className="text-center mt-12 p-12 bg-white/50 rounded-3xl border border-dashed border-gray-300">
+                    <p className="text-[#86868B]">No tutors found for this subject yet.</p>
+                </div>
             )}
 
             {/* Booking Modal */}
             {bookingTutor && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-                    <div className="bg-white rounded-lg p-6 max-w-sm w-full">
-                        <h3 className="text-xl font-bold mb-4">Book Session with {bookingTutor.tutor.firstName}</h3>
+                <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fade-in">
+                    <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl animate-scale-up">
+                        <h3 className="text-2xl font-semibold mb-2 text-[#1D1D1F]">Book Session</h3>
+                        <p className="text-[#86868B] text-sm mb-6">with {bookingTutor.tutor.firstName}</p>
 
-                        {msg && <div className={`p-2 mb-4 rounded ${msg.includes('confirmed') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>{msg}</div>}
+                        {msg && <div className={`p-3 mb-6 rounded-xl text-sm ${msg.includes('confirmed') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>{msg}</div>}
 
-                        <div className="mb-4">
-                            <label className="block text-sm font-medium mb-1">Start Time</label>
+                        <div className="mb-6">
+                            <label className="block text-xs font-medium text-[#86868B] uppercase tracking-wide mb-2 ml-1">Start Time</label>
                             <input
                                 type="datetime-local"
                                 value={startTime}
                                 onChange={(e) => setStartTime(e.target.value)}
-                                className="w-full border rounded p-2"
+                                className="input-field"
                             />
                         </div>
 
-                        <div className="mb-6 bg-gray-50 p-3 rounded text-sm">
+                        <div className="mb-8 bg-[#F5F5F7] p-4 rounded-xl text-sm space-y-2">
                             <div className="flex justify-between">
-                                <span>Price/Hour:</span>
-                                <span className="font-medium">{bookingTutor.price} tokens</span>
+                                <span className="text-[#86868B]">Price/Hour</span>
+                                <span className="font-medium text-[#1D1D1F]">{bookingTutor.price} tokens</span>
                             </div>
-                            <div className="flex justify-between mt-1">
-                                <span>Your Balance:</span>
-                                <span className={`font-medium ${user && user.balance < bookingTutor.price ? 'text-red-600' : 'text-green-600'}`}>{user?.balance} tokens</span>
+                            <div className="flex justify-between">
+                                <span className="text-[#86868B]">Your Balance</span>
+                                <span className={`font-medium ${user && user.balance < bookingTutor.price ? 'text-red-500' : 'text-green-600'}`}>{user?.balance} tokens</span>
                             </div>
                         </div>
 
                         <div className="flex gap-3">
-                            <button onClick={() => setBookingTutor(null)} className="flex-1 bg-gray-200 py-2 rounded">Cancel</button>
+                            <button onClick={() => setBookingTutor(null)} className="btn-secondary flex-1">Cancel</button>
                             <button
                                 onClick={handleBook}
                                 disabled={!startTime || (user ? user.balance < bookingTutor.price : true)}
-                                className="flex-1 bg-indigo-600 text-white py-2 rounded disabled:opacity-50"
+                                className="btn-primary flex-1"
                             >
                                 Confirm
                             </button>

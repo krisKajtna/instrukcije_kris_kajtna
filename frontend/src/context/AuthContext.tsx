@@ -11,6 +11,7 @@ interface User {
     avatarUrl?: string;
     bio?: string;
     balance: number;
+    createdAt?: string;
 }
 
 interface AuthContextType {

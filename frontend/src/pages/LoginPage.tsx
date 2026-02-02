@@ -22,48 +22,53 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-            <div className="max-w-md w-full p-6 bg-white rounded-xl shadow-lg">
-                <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Welcome Back</h2>
+        <div className="min-h-screen flex items-center justify-center p-4">
+            <div className="card-glass w-full max-w-[400px] p-8 md:p-12 animate-fade-in-up">
+                <div className="text-center mb-10">
+                    <h2 className="text-3xl font-semibold text-[#1D1D1F] tracking-tight">Welcome Back</h2>
+                    <p className="text-[#86868B] mt-2 text-sm">Please sign in to continue</p>
+                </div>
 
                 {serverError && (
-                    <div className="p-3 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">
+                    <div className="p-3 mb-6 text-sm text-red-600 bg-red-50 rounded-lg border border-red-100 text-center">
                         {serverError}
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Email</label>
+                        <label className="block text-xs font-medium text-[#86868B] uppercase tracking-wide mb-2 ml-1">Email</label>
                         <input
                             {...register('email', { required: 'Email is required' })}
                             type="email"
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+                            placeholder="name@example.com"
+                            className="input-field"
                         />
-                        {errors.email && <span className="text-xs text-red-500">{String(errors.email.message)}</span>}
+                        {errors.email && <span className="text-xs text-red-500 mt-1 ml-1 block">{String(errors.email.message)}</span>}
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Password</label>
+                        <label className="block text-xs font-medium text-[#86868B] uppercase tracking-wide mb-2 ml-1">Password</label>
                         <input
                             {...register('password', { required: 'Password is required' })}
                             type="password"
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+                            placeholder="••••••••"
+                            className="input-field"
                         />
-                        {errors.password && <span className="text-xs text-red-500">{String(errors.password.message)}</span>}
+                        {errors.password && <span className="text-xs text-red-500 mt-1 ml-1 block">{String(errors.password.message)}</span>}
                     </div>
 
                     <button
                         type="submit"
-                        className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        className="btn-primary w-full mt-4"
                     >
                         Sign In
                     </button>
                 </form>
 
-                <p className="mt-4 text-center text-sm text-gray-600">
+                <p className="mt-8 text-center text-sm text-[#86868B]">
                     Don't have an account?{' '}
-                    <Link to="/register" className="font-medium text-indigo-600 hover:text-indigo-500">
+                    <Link to="/register" className="font-medium text-[#0071E3] hover:underline transition-colors">
                         Sign up
                     </Link>
                 </p>
