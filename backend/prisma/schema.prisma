@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum Role {
+  STUDENT
+  TUTOR
+  ADMIN
+}
+
+enum TransactionType {
+  DEPOSIT
+  PAYMENT
+  REFUND
+  INCOME
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(STUDENT)
+  firstName String
+  lastName  String
+  bio       String?
+  avatarUrl String?
+  balance   Int      @default(0) // Virtual tokens
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tutorSubjects         TutorSubject[]
+  reservationsAsStudent Reservation[]  @relation("StudentReservations")
+  reservationsAsTutor   Reservation[]  @relation("TutorReservations")
+  transactions          Transaction[]
+}
+
+model Subject {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  category  String?
+  createdAt DateTime @default(now())
+
+  tutorSubjects TutorSubject[]
+}
+
+model TutorSubject {
+  id        String @id @default(uuid())
+  tutorId   String
+  subjectId String
+  price     Int // Price in tokens
+
+  tutor   User    @relation(fields: [tutorId], references: [id])
+  subject Subject @relation(fields: [subjectId], references: [id])
+
+  @@unique([tutorId, subjectId])
+}
+
+model Reservation {
+  id        String            @id @default(uuid())
+  studentId String
+  tutorId   String
+  subjectId String?
+  status    ReservationStatus @default(PENDING)
+  startTime DateTime
+  endTime   DateTime
+  price     Int // Price locked at reservation time
+  createdAt DateTime          @default(now())
+
+  student User @relation("StudentReservations", fields: [studentId], references: [id])
+  tutor   User @relation("TutorReservations", fields: [tutorId], references: [id])
+}
+
+model Transaction {
+  id        String          @id @default(uuid())
+  userId    String
+  amount    Int // Positive for deposit/income, negative for payment/withdrawal
+  type      TransactionType
+  createdAt DateTime        @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
