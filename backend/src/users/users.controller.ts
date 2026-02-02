@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Body, UseGuards, Request, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Patch, Post, Body, UseGuards, Request, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -39,5 +39,21 @@ export class UsersController {
         // In production, upload to Cloudinary/S3 here
         const avatarUrl = `/uploads/avatars/${file.filename}`;
         return this.usersService.update(req.user.userId, { avatarUrl });
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Post('subjects')
+    async addSubject(@Request() req, @Body() body: { subjectId: string, price: number }) {
+        if (req.user.role !== 'TUTOR') {
+            // In real app, throw ForbiddenException
+            return { error: 'Only tutors can add subjects' };
+        }
+        return this.usersService.addTutorSubject(req.user.userId, body.subjectId, Number(body.price));
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Get('subjects')
+    async getMySubjects(@Request() req) {
+        return this.usersService.getTutorSubjects(req.user.userId);
     }
 }

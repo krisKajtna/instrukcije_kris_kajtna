@@ -24,4 +24,21 @@ export class UsersService {
             data,
         });
     }
+
+    async addTutorSubject(userId: string, subjectId: string, price: number) {
+        return this.prisma.tutorSubject.create({
+            data: {
+                tutorId: userId,
+                subjectId,
+                price,
+            },
+        });
+    }
+
+    async getTutorSubjects(userId: string) {
+        return this.prisma.tutorSubject.findMany({
+            where: { tutorId: userId },
+            include: { subject: true },
+        });
+    }
 }
