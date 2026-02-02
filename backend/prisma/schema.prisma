@@ -7,33 +7,16 @@ generator client {
 
 datasource db {
   provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
-enum Role {
-  STUDENT
-  TUTOR
-  ADMIN
-}
-
-enum TransactionType {
-  DEPOSIT
-  PAYMENT
-  REFUND
-  INCOME
-}
-
-enum ReservationStatus {
-  PENDING
-  CONFIRMED
-  COMPLETED
-  CANCELLED
-}
+// Enums removed for SQLite compatibility. Use string constants in application code.
 
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
   password  String
-  role      Role     @default(STUDENT)
+  role      String   @default("STUDENT") // Enums: STUDENT, TUTOR, ADMIN
   firstName String
   lastName  String
   bio       String?
@@ -75,7 +58,7 @@ model Reservation {
   studentId String
   tutorId   String
   subjectId String?
-  status    ReservationStatus @default(PENDING)
+  status    String            @default("PENDING") // Enums: PENDING, CONFIRMED, COMPLETED, CANCELLED
   startTime DateTime
   endTime   DateTime
   price     Int // Price locked at reservation time
@@ -90,7 +73,7 @@ model Transaction {
   id        String          @id @default(uuid())
   userId    String
   amount    Int // Positive for deposit/income, negative for payment/withdrawal
-  type      TransactionType
+  type      String          // Enums: DEPOSIT, PAYMENT, REFUND, INCOME
   createdAt DateTime        @default(now())
 
   user User @relation(fields: [userId], references: [id])
