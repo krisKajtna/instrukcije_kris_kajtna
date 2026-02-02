@@ -9,6 +9,7 @@ interface User {
     lastName: string;
     role: 'STUDENT' | 'TUTOR';
     avatarUrl?: string;
+    bio?: string;
     balance: number;
 }
 
