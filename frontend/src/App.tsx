@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './context/AuthContext';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import TutorDashboard from './pages/TutorDashboard';
+import StudentDashboard from './pages/StudentDashboard';
 
 // Simple protected route wrapper
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
@@ -12,15 +14,25 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   return children;
 };
 
-// Dashboard placeholder
+// Dashboard route
 const Dashboard = () => {
   const { user, logout } = useAuth();
+
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold">Welcome, {user?.firstName}!</h1>
-      <p>Role: {user?.role}</p>
-      <p>Balance: {user?.balance} tokens</p>
-      <button onClick={logout} className="mt-4 px-4 py-2 bg-red-500 text-white rounded">Logout</button>
+    <div>
+      <header className="bg-white shadow p-4 mb-4 flex justify-between items-center">
+        <h1 className="font-bold text-xl text-indigo-600">Instrukcije</h1>
+        <div className="flex items-center gap-4">
+          <span>{user?.firstName} ({user?.role})</span>
+          <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-sm font-medium">
+            {user?.balance} tokens
+          </span>
+          <button onClick={logout} className="text-red-500 hover:text-red-700 text-sm">Logout</button>
+        </div>
+      </header>
+      <main className="container mx-auto">
+        {user?.role === 'TUTOR' ? <TutorDashboard /> : <StudentDashboard />}
+      </main>
     </div>
   );
 }
