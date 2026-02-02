@@ -20,35 +20,35 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { user, logout } = useAuth();
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[#F5F5F7]">
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-12">
+        <div className="w-full mx-auto px-6 h-16 grid grid-cols-3 items-center">
+          <div className="flex justify-start">
             <Link to="/dashboard" className="font-semibold text-xl tracking-tight text-[#1D1D1F] hover:opacity-80 transition-opacity">
               Instrukcije
             </Link>
-
-            <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-              <Link to="/dashboard" className="text-[#1D1D1F] hover:text-[#0071E3] transition-colors">Find Tutors</Link>
-              <Link to="/reservations" className="text-[#86868B] hover:text-[#1D1D1F] transition-colors">Reservations</Link>
-            </nav>
           </div>
 
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-3 pl-6 border-l border-gray-200 h-8">
+          <nav className="flex justify-center items-center gap-10 text-sm font-medium">
+            <Link to="/dashboard" className="text-[#1D1D1F] hover:text-[#0071E3] transition-colors">Find Tutors</Link>
+            <Link to="/reservations" className="text-[#86868B] hover:text-[#1D1D1F] transition-colors">Reservations</Link>
+          </nav>
+
+          <div className="flex justify-end items-center gap-6">
+            <div className="flex items-center gap-4">
               <div className="text-right hidden sm:block">
-                <div className="text-xs font-semibold text-[#1D1D1F]">{user?.firstName}</div>
+                <div className="text-sm font-semibold text-[#1D1D1F]">{user?.firstName}</div>
                 <div className="text-[10px] text-[#86868B] uppercase tracking-wide font-medium">{user?.role}</div>
               </div>
 
-              <Link to="/wallet" className="bg-[#F5F5F7] hover:bg-[#E8E8ED] transition-colors px-3 py-1.5 rounded-full flex items-center gap-2 group">
-                <span className="text-xs font-medium text-[#1D1D1F]">{user?.balance}</span>
+              <Link to="/wallet" className="bg-[#F5F5F7] hover:bg-[#E8E8ED] transition-colors px-4 py-2 rounded-full flex items-center gap-2 group">
+                <span className="text-sm font-medium text-[#1D1D1F]">{user?.balance}</span>
                 <span className="w-2 h-2 rounded-full bg-[#0071E3] group-hover:animate-pulse"></span>
               </Link>
 
               <div className="relative group">
                 <Link to="/profile">
-                  <div className="w-8 h-8 rounded-full bg-gray-200 overflow-hidden ring-2 ring-transparent group-hover:ring-[#0071E3]/20 transition-all">
+                  <div className="w-9 h-9 rounded-full bg-gray-200 overflow-hidden ring-2 ring-transparent group-hover:ring-[#0071E3]/20 transition-all shadow-sm">
                     {user?.avatarUrl ? (
                       <img src={`http://localhost:3000${user.avatarUrl}`} alt="" className="w-full h-full object-cover" />
                     ) : (
@@ -63,7 +63,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
             <button
               onClick={logout}
-              className="text-[#86868B] hover:text-red-500 transition-colors"
+              className="text-[#86868B] hover:text-red-500 transition-colors ml-2"
               title="Sign out"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
@@ -71,7 +71,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           </div>
         </div>
       </header>
-      <main className="flex-1 w-full bg-[#F5F5F7]">
+      <main className="flex-1 w-full mx-auto">
         {children}
       </main>
     </div>
