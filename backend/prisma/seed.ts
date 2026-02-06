@@ -50,8 +50,7 @@ async function main() {
             await prisma.subject.create({
                 data: {
                     name: subject.name,
-                    // If the schema has a category or description field, add it here.
-                    // Assuming basic schema for now based on subjects.service.ts
+                    category: subject.category
                 }
             });
             console.log(`Created subject: ${subject.name}`);

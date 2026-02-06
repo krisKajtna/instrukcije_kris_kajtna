@@ -17,4 +17,16 @@ export class ReservationsController {
   findAll(@Request() req) {
     return this.reservationsService.findAllForUser(req.user.userId, req.user.role);
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Patch(':id/confirm')
+  confirm(@Request() req, @Param('id') id: string) {
+    return this.reservationsService.confirm(req.user.userId, id);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Patch(':id/decline')
+  decline(@Request() req, @Param('id') id: string) {
+    return this.reservationsService.decline(req.user.userId, id);
+  }
 }

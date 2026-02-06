@@ -36,19 +36,13 @@ export class ReservationsService {
         throw new BadRequestException('Insufficient balance');
       }
 
-      // Deduct from student
+      // Deduct from student only (hold in system)
       await prisma.user.update({
         where: { id: studentId },
         data: { balance: { decrement: totalPrice } }
       });
 
-      // Add to tutor
-      await prisma.user.update({
-        where: { id: data.tutorId },
-        data: { balance: { increment: totalPrice } }
-      });
-
-      // Create Reservation
+      // Create Reservation PENDING
       return prisma.reservation.create({
         data: {
           studentId,
@@ -57,8 +51,60 @@ export class ReservationsService {
           startTime: start,
           endTime: end,
           price: totalPrice,
-          status: 'CONFIRMED'
+          status: 'PENDING'
         }
+      });
+    });
+  }
+
+  async confirm(tutorId: string, reservationId: string) {
+    return this.prisma.$transaction(async (prisma) => {
+      const reservation = await prisma.reservation.findUnique({ where: { id: reservationId } });
+
+      if (!reservation || reservation.tutorId !== tutorId) {
+        throw new BadRequestException('Reservation not found or access denied');
+      }
+
+      if (reservation.status !== 'PENDING') {
+        throw new BadRequestException('Reservation is not pending');
+      }
+
+      // Transfer funds to tutor
+      await prisma.user.update({
+        where: { id: tutorId },
+        data: { balance: { increment: reservation.price } }
+      });
+
+      // Update status
+      return prisma.reservation.update({
+        where: { id: reservationId },
+        data: { status: 'CONFIRMED' }
+      });
+    });
+  }
+
+  async decline(tutorId: string, reservationId: string) {
+    return this.prisma.$transaction(async (prisma) => {
+      const reservation = await prisma.reservation.findUnique({ where: { id: reservationId } });
+
+      if (!reservation || reservation.tutorId !== tutorId) {
+        throw new BadRequestException('Reservation not found or access denied');
+      }
+
+      if (reservation.status !== 'PENDING') {
+        throw new BadRequestException('Reservation is not pending');
+      }
+
+      // Refund student
+      await prisma.user.update({
+        where: { id: reservation.studentId },
+        data: { balance: { increment: reservation.price } }
+      });
+
+      // Update status
+      return prisma.reservation.update({
+        where: { id: reservationId },
+        data: { status: 'CANCELLED' }
       });
     });
   }
